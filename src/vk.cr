@@ -1,5 +1,6 @@
 require "json"
 require "http"
+require "./common/**"
 
 module VKontakte
   class Client
@@ -33,7 +34,7 @@ module VKontakte
     end
 
     def send(message : String, peer_id : Int32, attachments : String | Array(String)=[] of String)
-      attachments = [attachments] if attachment.is_a?(String)
+      attachments = [attachments] if attachments.is_a?(String)
 
       return self.call("messages.send", {
         "random_id" => "0",
