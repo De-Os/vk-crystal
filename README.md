@@ -85,6 +85,8 @@ loop do
     when "message_new"
       vk.send("Не пиши сюда >:(", update["object"]["message"]["peer_id"].as_i)
     end
+
+    size += 1
   end
 end
 ```
