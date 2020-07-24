@@ -15,6 +15,12 @@ module VKontakte
 
       token = token.sample(1)[0] if token.is_a?(Array(String))
 
+      if params.is_a?(Hash(String, String))
+        params.each do |key, value|
+          params[key] = "#{value}" if !value.is_a?(String)
+        end
+      end
+
       response = JSON.parse(HTTP::Client.post(
         url: "https://api.vk.com/method/#{method}?access_token=#{token}&v=#{@v}",
         body: HTTP::Params.encode(params)
@@ -26,7 +32,9 @@ module VKontakte
       end
     end
 
-    def send(message : String, peer_id : Int32, attachments : Array(String)=[] of String)
+    def send(message : String, peer_id : Int32, attachments : String | Array(String)=[] of String)
+      attachments = [attachments] if attachment.is_a?(String)
+
       return self.call("messages.send", {
         "random_id" => "0",
         "peer_id" => peer_id.to_s,
