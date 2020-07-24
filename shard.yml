@@ -1,0 +1,8 @@
+name: vk
+version: 0.1.1
+
+authors:
+  - - Alexander Vinogradov ~> vk.com/vinogradov.sasha || t.me/sasha_vinogradov
+
+description: |
+  Library for vk.com api on Crystal lang
