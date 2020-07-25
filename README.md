@@ -42,6 +42,12 @@ friends = vk.call("friends.get", {
 ```crystal
 vk.send("Test message", peer_id) # peer_id - ид чата
 ```
+Можно также указать дополнительные поля для `messages.send`:
+```crystal
+vk.send("@all, как хорошо что пуш не сработает", peer_id, add_fields: {
+  "disable_mentions" => "1"
+  })
+```
 ### Загрузка и отправка вложений
 На данный момент поддерживается только загрузка фотографий через метод `upload`:
 ```crystal
@@ -58,6 +64,31 @@ vk.send("Nice cat!", peer_id, photo)
 vk.send("Nice cats!", peer_id, [vk.upload("cat1.png", peer_id), vk.upload("cat2.png", peer_id)])
 ```
 
+### Отправка клавиатуры
+
+Отправка кнопок осуществляется с помощью параметра `keyboard`, пример:
+```crystal
+vk.send("Buttons!", 123, keyboard: {
+  "inline" => true, # inline/one_time, см. доки ВК
+  "buttons" => [
+    [VKontakte.getBtn("Название кнопки", {
+      "command" => "test"
+      }), vk.getBtn("Вторая кнопка", {"command" => "test2"}, "negative")],
+    [vk.getBtn("Кнопка во втором ряду!", {"command" => "test3"})]
+  ]
+  })
+```
+Итак, кнопки можно делать напрямую через модуль: `VKontakte.getBtn(...)`, либо через объект: `vk.getBtn(...)`
+
+Пока что поддерживаются только обычные кнопки, построение кнопки осуществляется следующим образом:
+
+```crystal
+vk.getBtn(
+  label: "Текст на кнопке",
+  payload: {} # "Полезная нагрузка" кнопки, см. доки ВК
+  color: "Один из цветов" # Перечень цветов также см. в доках ВК
+)
+```
 ## Остальные реализованные методы:
 #### Получение имени пользователя/группы:
 ```crystal

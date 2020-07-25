@@ -1,9 +1,13 @@
 require "json"
 require "http"
-require "./common/**"
+require "./**"
 
 module VKontakte
+
+  alias KeyboardType = String | Hash(String, String | Array(Hash(String, String | Hash(String, String))))
+
   class Client
+
     @token : String | Array(String)
     @v : String
 
@@ -33,15 +37,15 @@ module VKontakte
       end
     end
 
-    def send(message : String, peer_id : Int32, attachments : String | Array(String)=[] of String)
+    def send(message : String, peer_id : Int32, attachments : String | Array(String)=[] of String, keyboard={} of String => VKontakte::KeyboardType, add_fields={} of String => String)
       attachments = [attachments] if attachments.is_a?(String)
-
+      add_fields["keyboard"] = keyboard.to_json if keyboard.size > 0
       return self.call("messages.send", {
         "random_id" => "0",
         "peer_id" => peer_id.to_s,
         "attachment" => attachments.join(","),
         "message" => message.to_s
-        })
+      }.merge!(add_fields))
     end
 
     def getName(user_id : Int32, name_case="Nom")
@@ -82,6 +86,10 @@ module VKontakte
           })[0]
         return "photo#{result["owner_id"]}_#{result["id"]}"
       end
+    end
+
+    def getBtn(label : String, payload : Hash, color : String="default")
+      VKontakte.getBtn(label, payload, color)
     end
   end
 end
