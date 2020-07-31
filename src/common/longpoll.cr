@@ -24,10 +24,8 @@ module VKontakte
           "ts" => @ts
         })}"
       ).body)
-      if updates["updates"]?
-        @ts = updates["ts"].as_s
-        return updates["updates"]
-      end
+      @ts = updates["ts"].as_s
+      return updates["updates"]
     end
   end
 end

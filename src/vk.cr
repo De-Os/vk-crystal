@@ -20,10 +20,12 @@ module VKontakte
 
       token = token.sample(1)[0] if token.is_a?(Array(String))
 
-      if params.is_a?(Hash(String, String))
+      if !params.is_a?(Hash(String, String))
+        temp = {} of String => String
         params.each do |key, value|
-          params[key] = "#{value}" if !value.is_a?(String)
+          temp[key] = "#{value}" if !value.is_a?(String)
         end
+        params = temp
       end
 
       response = JSON.parse(HTTP::Client.post(
@@ -90,6 +92,11 @@ module VKontakte
 
     def getBtn(label : String, payload : Hash, color : String="default")
       VKontakte.getBtn(label, payload, color)
+    end
+
+    def getBotLp(group_id) : VKontakte::LongPoll
+      lp = self.call("groups.getLongPollServer", {"group_id" => group_id})
+      VKontakte::LongPoll.new(lp["server"].as_s, lp["key"].as_s, lp["ts"].as_s)
     end
   end
 end

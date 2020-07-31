@@ -101,8 +101,7 @@ name = vk.getName(user_id, "Ins") # Игнорируется при получе
 В модуле присутствует примитивный лонгполл, с помощью которого можно строить ботов. Пример простейшего бота с данным модулем:
 ```crystal
 # Создание и подключение
-lp = vk.call("groups.getLongPollServer", {"group_id" => 123})
-lp = VK::LongPoll.new(lp["server"].as_s, lp["key"].as_s, lp["ts"].as_s)
+lp = vk.getBotLp(group_id: 123)
 
 # Обработка событий
 loop do
