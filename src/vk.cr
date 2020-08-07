@@ -95,8 +95,7 @@ module VKontakte
     end
 
     def getBotLp(group_id) : VKontakte::LongPoll
-      lp = self.call("groups.getLongPollServer", {"group_id" => group_id})
-      VKontakte::LongPoll.new(lp["server"].as_s, lp["key"].as_s, lp["ts"].as_s)
+      VKontakte::LongPoll.new(group_id, self)
     end
   end
 end
